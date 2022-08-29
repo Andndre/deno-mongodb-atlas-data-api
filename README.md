@@ -31,3 +31,14 @@ But make sure to initialize the DataAPI instance with this code first:
 ```ts
 const instance = DataAPI.init(BASE_URL + '/action', DATA_SOURCE, DATABASE, API_KEY) // returns the DataAPI instance
 ```
+
+## When to Use the Data API
+
+*taken straight from this [documentation page](https://www.mongodb.com/docs/atlas/api/data-api/)*
+
+You can use the Data API to integrate Atlas into any apps and services that support HTTPS requests. For example, you might:
+
+- call the API from a serverless edge function
+- access test data and log events in a CI/CD workflow
+- integrate Atlas into a federated API gateway
+- connect from an environment not currently supported via a MongoDB Driver or Realm SDK
