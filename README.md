@@ -29,6 +29,8 @@ instance.insertOne('collectionName', {name: 'test', age: 17})
 ```
 But make sure to initialize the DataAPI instance with this code first:
 ```ts
+import { DataAPI } from 'https://deno.land/x/mongodbdataapi/mod.ts';
+
 const instance = DataAPI.init(BASE_URL + '/action', DATA_SOURCE, DATABASE, API_KEY) // returns the DataAPI instance
 ```
 
