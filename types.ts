@@ -1,26 +1,26 @@
 export type Inserted = {
-	insertedId: string;
+  insertedId: string;
 };
 
 export type InsertedMany = {
-	insertedIds: string[];
+  insertedIds: string[];
 };
 
 export type FindOne = {
-	// deno-lint-ignore no-explicit-any
-	document: any;
+  // deno-lint-ignore no-explicit-any
+  document: any;
 };
 
 export type Find = {
-	// deno-lint-ignore no-explicit-any
-	documents: any[];
+  // deno-lint-ignore no-explicit-any
+  documents: any[];
 };
 
 export type UpdateOne = {
-	matchedCount: number;
-	modifiedCount: number;
+  matchedCount: number;
+  modifiedCount: number;
 };
 
 export type DeleteOne = {
-	deletedCount: number;
+  deletedCount: number;
 };

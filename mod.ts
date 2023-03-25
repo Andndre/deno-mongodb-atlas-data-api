@@ -1,2 +1,2 @@
-export { DataAPI } from './dataApi.ts';
-export * from './types.ts';
+export { DataAPI } from "./dataApi.ts";
+export * from "./types.ts";
