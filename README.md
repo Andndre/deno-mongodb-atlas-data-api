@@ -1,38 +1,33 @@
-# Deno MongoDB Atlas Data API Wrapper
+# Deno MongoDB Atlas Data API
 
-This is a simple library that turns the long and repeating code to access the MongoDB Data API into more simple, readable, and maintainable code.
+This is a simple library that provides an interface to the MongoDB Atlas Data API. The library can be used to perform basic CRUD (Create, Read, Update, and Delete) operations on a MongoDB database without the need for a dedicated driver.
 
-This library can simplify your code from this:
+The library is written in TypeScript, and it provides TypeScript definitions for all of its methods.
+
+## Usage
+To use the DataAPI library, you first need to initialize it with your MongoDB Atlas API key and the URL of your Data API endpoint. You can then use the insertOne, insertMany, findOne, find, updateOne, and deleteOne methods to perform CRUD operations on your database.
+
+Here's an example of how you can use the library to insert a document into a collection:
+
 ```ts
-const URL = BASE_URL + '/insertOne';
-const response = await fetch(URL, {
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json',
-		'api-key': API_KEY,
-	},
-	body: JSON.stringify({
-		collection: 'collectionName',
-		database: 'databaseName',
-		dataSource: 'the-data-source',
-		document: {
-			name: 'test',
-			age: 17
-		},
-	}),
+import { DataAPI } from "https://deno.land/x/mongodbdataapi/mod.ts";
+
+const api = DataAPI.init(
+  "https://data.mongodb-api.com/app/data-abcde/endpoint/data/v1/action", // remember to add "/action"!
+  "my-cluster",
+  "my-database",
+  "my-api-key",
+);
+
+const result = await api.insertOne("my-collection", {
+  name: "John Doe",
+  age: 42,
 });
-```
-to this:
-```ts
-const instance = DataAPI.get();
-instance.insertOne('collectionName', {name: 'test', age: 17})
-```
-But make sure to initialize the DataAPI instance with this code first:
-```ts
-import { DataAPI } from 'https://deno.land/x/mongodbdataapi/mod.ts';
 
-const instance = DataAPI.init(BASE_URL + '/action', DATA_SOURCE, DATABASE, API_KEY) // returns the DataAPI instance
+console.log(result);
 ```
+
+The `init` method initializes the library with the URL of the Data API endpoint, the name of the cluster, the name of the database, and the API key. The insertOne method is then used to insert a document into the my-collection collection. The result of the operation is logged to the console.
 
 ## When to Use the Data API
 

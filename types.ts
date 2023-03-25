@@ -6,14 +6,12 @@ export type InsertedMany = {
   insertedIds: string[];
 };
 
-export type FindOne = {
-  // deno-lint-ignore no-explicit-any
-  document: any;
+export type FindOne<T> = {
+  document: T;
 };
 
-export type Find = {
-  // deno-lint-ignore no-explicit-any
-  documents: any[];
+export type Find<T> = {
+  documents: T[];
 };
 
 export type UpdateOne = {

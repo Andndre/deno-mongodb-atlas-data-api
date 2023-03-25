@@ -29,8 +29,11 @@ export class DataAPI {
   }
   /**
    * @param url for example: " https://data.mongodb-api.com/app/data-abcde/endpoint/data/v1/action "
+   * @param dataSource your cluster
+   * @param databaseName database name inside your cluster
    * @param apiKey
-   * @returns
+   *
+   * @see https://www.mongodb.com/docs/atlas/api/data-api/
    */
   static init(
     url: string,
@@ -52,6 +55,12 @@ export class DataAPI {
     }
     return DataAPI.instance!;
   }
+  /**
+   * @param collection
+   * @param document
+   *
+   * @see https://www.mongodb.com/docs/atlas/api/data-api/
+   */
   // deno-lint-ignore no-explicit-any
   async insertOne(collection: string, document: any) {
     const URI = this.url + "/insertOne";
@@ -67,12 +76,16 @@ export class DataAPI {
         document,
       }),
     });
-    const json = (await readJSON(response.body!)) as Inserted;
-    return json;
+    return await response.json() as Inserted;
   }
 
-  // deno-lint-ignore no-explicit-any
-  async insertMany(collection: string, documents: any[]) {
+  /**
+   * @param collection
+   * @param documents
+   *
+   * @see https://www.mongodb.com/docs/atlas/api/data-api/
+   */
+  async insertMany<T>(collection: string, documents: T[]) {
     const URI = this.url + "/insertMany";
     const response = await fetch(URI, {
       method: "POST",
@@ -86,11 +99,16 @@ export class DataAPI {
         documents,
       }),
     });
-    const json = (await readJSON(response.body!)) as InsertedMany;
-    return json;
+    return await response.json() as InsertedMany;
   }
+  /**
+   * @param collection
+   * @param filter
+   *
+   * @see https://www.mongodb.com/docs/atlas/api/data-api/
+   */
   // deno-lint-ignore no-explicit-any
-  async findOne(collection: string, filter: any) {
+  async findOne<T>(collection: string, filter: any) {
     const URI = this.url + "/findOne";
     const response = await fetch(URI, {
       method: "POST",
@@ -104,17 +122,17 @@ export class DataAPI {
         filter,
       }),
     });
-    const json = (await readJSON(response.body!)) as FindOne;
-    return json;
+    return await response.json() as FindOne<T>;
   }
   /**
    * @param collection
    * @param filter example: { "breed": "Labrador", "age": { "$gt" : 2} }
    * @param sort example: { "age" : 1 }
-   * @returns
+   *
+   * @see https://www.mongodb.com/docs/atlas/api/data-api/
    */
   // deno-lint-ignore no-explicit-any
-  async find(collection: string, filter: any, sort?: any) {
+  async find<T>(collection: string, filter: any, sort?: any) {
     const URI = this.url + "/find";
     const response = await fetch(URI, {
       method: "POST",
@@ -129,8 +147,7 @@ export class DataAPI {
         sort,
       }),
     });
-    const json = (await readJSON(response.body!)) as Find;
-    return json;
+    return await response.json() as Find<T>;
   }
   /**
    * @param collection
@@ -154,8 +171,7 @@ export class DataAPI {
         update,
       }),
     });
-    const json = (await readJSON(response.body!)) as UpdateOne;
-    return json;
+    return await response.json() as UpdateOne;
   }
   // deno-lint-ignore no-explicit-any
   async deleteOne(collection: string, filter: any) {
@@ -172,8 +188,7 @@ export class DataAPI {
         filter,
       }),
     });
-    const json = (await readJSON(response.body!)) as DeleteOne;
-    return json;
+    return await response.json() as DeleteOne;
   }
   // deno-lint-ignore no-explicit-any
   async aggregate(collection: string, pipeline: any) {
@@ -190,8 +205,8 @@ export class DataAPI {
         pipeline,
       }),
     });
-    const json = await readJSON(response.body!);
-    return json;
+
+    return await response.json();
   }
   /**
 	 * ```ts
@@ -209,7 +224,8 @@ export class DataAPI {
 		}),
 	});
 	 * ```
-	 * for more information, please [read](https://www.mongodb.com/developer/products/atlas/atlas-data-api-introduction/)
+   *
+	 * @see https://www.mongodb.com/docs/atlas/api/data-api/
 	 */
   // deno-lint-ignore no-explicit-any
   async custom(collection: string, action: string, query: any) {
@@ -226,18 +242,6 @@ export class DataAPI {
         ...query,
       }),
     });
-    const json = await readJSON(response.body!);
-    return json;
+    return await response.json();
   }
-}
-
-async function readText(rs: ReadableStream<Uint8Array>) {
-  const reader = rs.getReader();
-  const value = (await reader.read()).value;
-  reader.cancel();
-  return new TextDecoder().decode(value);
-}
-
-async function readJSON(rs: ReadableStream<Uint8Array>) {
-  return JSON.parse(await readText(rs));
 }
